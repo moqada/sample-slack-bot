@@ -1,13 +1,13 @@
-# Deno Blank Template
+# Sample Slack Bot
 
-This is a blank Deno template used to build out apps using the Slack CLI.
+The sample of the generic Slack Bot that works on
+[the Slack Next-gen platform](https://api.slack.com/future).
 
 **Guide Outline**:
 
 - [Setup](#setup)
   - [Install the Slack CLI](#install-the-slack-cli)
-  - [Clone the Template](#clone-the-template)
-- [Create a Link Trigger](#create-a-link-trigger)
+  - [Set Environment Variables](#set-environment-variables)
 - [Running Your Project Locally](#running-your-project-locally)
 - [Testing](#testing)
 - [Deploying Your App](#deploying-your-app)
@@ -26,53 +26,23 @@ requires any of [the Slack paid plans](https://slack.com/pricing).
 
 ### Install the Slack CLI
 
-To use this template, you first need to install and configure the Slack CLI.
-Step-by-step instructions can be found in our
+To use this, you first need to install and configure the Slack CLI. Step-by-step
+instructions can be found in our
 [Quickstart Guide](https://api.slack.com/future/quickstart).
 
-### Clone the Template
+### Set Environment Variables
 
-Start by cloning this repository:
+[`bot/mention/google_image.ts`](bot/mention/google_image.ts) need the
+environment variables.
 
-```zsh
-# Clone this project onto your machine
-$ slack create my-app -t slack-samples/deno-blank-template
+You should get some variables from
+[Google Custom Search API](https://developers.google.com/custom-search/docs/overview),
+and you need to create the following `.env` file.
 
-# Change into this project directory
-$ cd my-app
 ```
-
-## Create a Link Trigger
-
-[Triggers](https://api.slack.com/future/triggers) are what cause workflows to
-run. These triggers can be invoked by a user, or automatically as a response to
-an event within Slack.
-
-A [link trigger](https://api.slack.com/future/triggers/link) is a type of
-trigger that generates a **Shortcut URL** which, when posted in a channel or
-added as a bookmark, becomes a link. When clicked, the link trigger will run the
-associated workflow.
-
-Link triggers are _unique to each installed version of your app_. This means
-that Shortcut URLs will be different across each workspace, as well as between
-[locally run](#running-your-project-locally) and
-[deployed apps](#deploying-your-app). When creating a trigger, you must select
-the Workspace that you'd like to create the trigger in. Each Workspace has a
-development version (denoted by `(dev)`), as well as a deployed version.
-
-To create a link trigger, run the following command:
-
-```zsh
-$ slack trigger create --trigger-def triggers/<YOUR_TRIGGER_FILE>.ts
+GOOGLE_CSE_ID=XXXXXXXXXXXXXXXXXXXXXX
+GOOGLE_CSE_KEY=YYYYYYYYYYYYYYYYYYYY
 ```
-
-After selecting a Workspace, the output provided will include the link trigger
-Shortcut URL. Copy and paste this URL into a channel as a message, or add it as
-a bookmark in a channel of the Workspace you selected.
-
-**Note: this link won't run the workflow until the app is either running locally
-or deployed!** Read on to learn how to run your app locally and eventually
-deploy it to Slack hosting.
 
 ## Running Your Project Locally
 
@@ -87,10 +57,24 @@ $ slack run
 Connected, awaiting events
 ```
 
-Once running, [previously created Shortcut URLs](#create-a-link-trigger)
-associated with the `(dev)` version of your app can be used to start workflows.
-
 To stop running locally, press `<CTRL> + C` to end the process.
+
+After running, you can see a question about the trigger then you choose
+`triggers/configure_bot.ts`.
+
+```
+? Choose a trigger definition file: triggers/configure_bot.ts
+```
+
+Or you can run the below command.
+
+```zsh
+slack trigger create --trigger-def triggers/configure_bot.ts
+```
+
+As a result, you can get the link trigger Shortcut URL. Copy and paste this URL
+into a channel as a message. After that, you follow the instruction in the modal
+then you can set up the necessary workflows.
 
 ## Testing
 
@@ -109,10 +93,9 @@ app to Slack hosting using `slack deploy`:
 $ slack deploy
 ```
 
-After deploying, [create new link triggers](#create-a-link-trigger) for the
-production version of your app (not appended with `(dev)`). Once the triggers
-are invoked, the associated workflows should run just as they did when
-developing locally.
+After deploying, create new link triggers for the production version of your app
+(not appended with `(dev)`). Once the triggers are invoked, the associated
+workflows should run just as they did when developing locally.
 
 ### Viewing Activity Logs
 
@@ -135,6 +118,11 @@ configuration. This file defines attributes like app name and description.
 Used by the CLI to interact with the project's SDK dependencies. It contains
 script hooks that are executed by the CLI and implemented by the SDK.
 
+### `/bot`
+
+The main logics of the bot. You can implement some event handlers (ex.
+`mention`, `message`, `reaction`).
+
 ### `/functions`
 
 [Functions](https://api.slack.com/future/functions) are reusable building blocks
@@ -155,12 +143,6 @@ to the next step.
 [Triggers](https://api.slack.com/future/triggers) determine when workflows are
 executed. A trigger file describes a scenario in which a workflow should be run,
 such as a user pressing a button or when a specific event occurs.
-
-### `/datastores`
-
-[Datastores](https://api.slack.com/future/datastores) can securely store and
-retrieve data for your application. Required scopes to use datastores include
-`datastore:write` and `datastore:read`.
 
 ## Resources
 
