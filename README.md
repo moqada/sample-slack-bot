@@ -3,6 +3,8 @@
 The sample of the generic Slack Bot that works on
 [the Slack Next-gen platform](https://api.slack.com/future).
 
+![](assets/preview.png)
+
 **Guide Outline**:
 
 - [Setup](#setup)
