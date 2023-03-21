@@ -1,12 +1,14 @@
+import { createMentionCommandTester } from "gbas/mod.ts";
 import { assert, assertMatch } from "std/testing/asserts.ts";
-import { createBotTester } from "../tester.ts";
+import { mentionCommandDispatcher } from "../dispatchers.ts";
 import { judge } from "./judge.ts";
 
-const { createContext } = createBotTester(judge);
+const { createContext } = createMentionCommandTester(judge);
 
 Deno.test("respond with emoji as the judge", async () => {
-  const ctx = createContext("judge 今日はおやつを食べてよい?");
-  const res = await judge.func(ctx);
+  const res = await mentionCommandDispatcher.dispatch(
+    createContext("<@BOT> judge 今日はおやつを食べてよい?"),
+  );
   assert(res.type === "reaction");
   assertMatch(res.emoji, /^(ok|no_good)$/);
 });

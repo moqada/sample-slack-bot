@@ -36,26 +36,6 @@ type ChannelResource = {
   num_members: number;
 };
 
-export const getThreadTs = async (
-  { client, messageTs, channelId }: {
-    channelId: string;
-    client: SlackAPIClient;
-    messageTs: string;
-  },
-) => {
-  const res = await client.chat.getPermalink({
-    message_ts: messageTs,
-    channel: channelId,
-  });
-  if (!res.ok) {
-    console.error(res.error);
-    return undefined;
-  }
-  const url = new URL(res.permalink);
-  const threadTs = url.searchParams.get("thread_ts");
-  return threadTs || undefined;
-};
-
 export const findRegisteredTrigger = async (
   { client, trigger }: {
     client: SlackAPIClient;

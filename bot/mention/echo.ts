@@ -1,10 +1,10 @@
-import { createBotMention } from "../utils.ts";
+import { createMentionCommand } from "gbas/mod.ts";
 
-export const echo = createBotMention({
+export const echo = createMentionCommand({
   name: "echo",
-  help: ["echo <message> - 指定のメッセージを返します"],
+  examples: ["echo <message> - 指定のメッセージを返します"],
   pattern: /^echo ([\s\S]*)/i,
-  func: ({ message }) => {
-    return { type: "message", text: message.match[1] };
+  execute: (c) => {
+    return c.res.message(c.match[1]);
   },
 });

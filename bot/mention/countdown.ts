@@ -1,14 +1,14 @@
-import { createBotMention } from "../utils.ts";
+import { createMentionCommand } from "gbas/mod.ts";
 
-export const countdown = createBotMention({
-  func: async ({ message, respond }) => {
-    const num = Number.parseInt(message.match[1]);
+export const countdown = createMentionCommand({
+  execute: async (c) => {
+    const num = Number.parseInt(c.match[1]);
     if (isNaN(num) || num < 1) {
-      return { type: "message", text: "1秒以上を指定してや" };
+      return c.res.message("1秒以上を指定してや");
     }
     await new Promise((resolve) => {
       const timer = (sec: number) => {
-        respond({ type: "message", text: `${sec}` });
+        c.interrupt.postMessage(`${sec}`);
         setTimeout(() => {
           const next = sec - 1;
           if (next > 0) {
@@ -20,9 +20,9 @@ export const countdown = createBotMention({
       };
       timer(num);
     });
-    return { type: "message", text: "finish!" };
+    return c.res.message("finish!");
   },
-  help: ["countdown <seconds> - 指定の時間をカウントダウンします"],
+  examples: ["countdown <seconds> - 指定の時間をカウントダウンします"],
   name: "countdown",
   pattern: /^countdown\s+(\d+)$/,
 });

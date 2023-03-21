@@ -1,11 +1,13 @@
-import { assertEquals } from "std/testing/asserts.ts";
-import { createBotTester } from "../tester.ts";
+import { createMentionCommandTester } from "gbas/mod.ts";
+import { assert, assertEquals } from "std/testing/asserts.ts";
+import { mentionCommandDispatcher } from "../dispatchers.ts";
 import { echo } from "./echo.ts";
 
-const { createContext } = createBotTester(echo);
+const { createContext } = createMentionCommandTester(echo);
 
-Deno.test("echo received text", () => {
-  const context = createContext("echo foo bar buz");
-  const res = echo.func(context);
-  assertEquals(res, { type: "message", text: "foo bar buz" });
+Deno.test("echo received text", async () => {
+  const context = createContext("<@BOT> echo foo bar baz");
+  const res = await mentionCommandDispatcher.dispatch(context);
+  assert(res.type === "message", res.type);
+  assertEquals(res.text, "foo bar baz");
 });

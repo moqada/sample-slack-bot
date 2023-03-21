@@ -1,10 +1,10 @@
-import { createBotMention } from "../utils.ts";
+import { createMentionCommand } from "gbas/mod.ts";
 
-export const ping = createBotMention({
+export const ping = createMentionCommand({
   name: "ping",
-  help: ["ping - PONGを返します"],
+  examples: ["ping - PONGを返します"],
   pattern: /^ping$/i,
-  func: ({ message }) => {
-    return { type: "message", text: "PONG", mentionUserId: message.userId };
+  execute: (c) => {
+    return c.res.message("PONG", { mentionUserIds: [c.event.userId] });
   },
 });

@@ -1,17 +1,13 @@
-import { createBotReaction } from "../utils.ts";
+import { createReactionCommand } from "gbas/mod.ts";
 
-export const crab = createBotReaction({
+export const crab = createReactionCommand({
   name: "crab",
-  help: [":crab: - たしかに"],
+  examples: [":crab: - たしかに"],
   emojis: ["crab"],
-  func: ({ reaction }) => {
-    if (reaction.emoji === "crab") {
-      return {
-        type: "message",
-        "text": "たし:crab:",
-        mentionUserId: reaction.userId,
-      };
+  execute: (c) => {
+    if (c.event.emoji === "crab") {
+      return c.res.message("たし:crab:", { mentionUserIds: [c.event.userId] });
     }
-    return { type: "none" };
+    return c.res.none();
   },
 });
