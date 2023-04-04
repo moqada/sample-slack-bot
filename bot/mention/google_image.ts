@@ -1,31 +1,33 @@
-import { createBotMention } from "../utils.ts";
+import { createMentionCommand } from "gbas/mod.ts";
 
-export const googleImage = createBotMention({
-  func: async ({ env, message }) => {
-    const query = message.match[1];
-    const imageUrl = await getImage({ env, query, type: "normal" });
+export const googleImage = createMentionCommand({
+  execute: async (c) => {
+    const query = c.match[1];
+    const imageUrl = await getImage({ env: c.env, query, type: "normal" });
     if (!imageUrl) {
-      return { type: "message", text: "画像がないよ" };
+      return c.res.message("画像がないよ");
     }
-    return { type: "message", text: imageUrl };
+    return c.res.message(imageUrl);
   },
-  help: ["image <query> - hog"],
+  examples: ["image <query> - hog"],
   name: "google image",
   pattern: /^image\s+(.+)$/,
+  outgoingDomains: ["customsearch.googleapis.com"],
 });
 
-export const googleAnimatedImage = createBotMention({
-  func: async ({ env, message }) => {
-    const query = message.match[1];
-    const imageUrl = await getImage({ env, query, type: "gif" });
+export const googleAnimatedImage = createMentionCommand({
+  execute: async (c) => {
+    const query = c.match[1];
+    const imageUrl = await getImage({ env: c.env, query, type: "gif" });
     if (!imageUrl) {
-      return { type: "message", text: "画像がないよ" };
+      return c.res.message("画像がないよ");
     }
-    return { type: "message", text: imageUrl };
+    return c.res.message(imageUrl);
   },
-  help: ["animated <query> - hoge"],
+  examples: ["animated <query> - hoge"],
   name: "google animated image",
   pattern: /^animate\s+(.+)$/,
+  outgoingDomains: ["customsearch.googleapis.com"],
 });
 
 const getImage = async (

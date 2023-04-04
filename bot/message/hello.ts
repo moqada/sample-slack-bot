@@ -1,10 +1,10 @@
-import { createBotMessage } from "../utils.ts";
+import { createMessageCommand } from "gbas/mod.ts";
 
-export const hello = createBotMessage({
+export const hello = createMessageCommand({
   name: "hello",
   pattern: /^hello$/i,
-  help: ["<hello> - helloにhelloをメンションする"],
-  func: ({ message }) => {
-    return { type: "message", text: "hello", mentionUserId: message.userId };
+  examples: ["<hello> - helloにhelloをメンションする"],
+  execute: (c) => {
+    return c.res.message("hello", { mentionUserIds: [c.event.userId] });
   },
 });
